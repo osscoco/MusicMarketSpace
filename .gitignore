@@ -54,8 +54,10 @@ front/src/environments/*.ts
 back/EFCore/bin/
 back/EFCore/obj/
 back/EFCore/appsettings.json
+back/EFCore/EFCore.csproj
 back/Models/bin/
 back/Models/obj/
+back/Models/Models.csproj
 back/Api/bin/
 back/Api/obj/
 back/Api/*.user
@@ -63,6 +65,7 @@ back/Api/*.rsuser
 back/Api/*.suo
 back/Api/*.userosscache
 back/Api/*.sln.docstates
+back/Api/back.csproj
 
 # Publish Output
 back/Api/publish/

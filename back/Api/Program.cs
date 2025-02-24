@@ -1,3 +1,5 @@
+using back.Interfaces;
+using back.Repositories;
 using EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -85,6 +87,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         serverVersion
     )
 );
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
