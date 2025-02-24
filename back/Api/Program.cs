@@ -1,8 +1,10 @@
-using back.Interfaces;
+﻿using back.Interfaces;
 using back.Repositories;
+using back.Services;
 using EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -88,7 +90,45 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var missingFields = context.ModelState
+            .Where(e => e.Key == "$")
+            .SelectMany(e => e.Value.Errors)
+            .Select(err => err.ErrorMessage)
+            .FirstOrDefault();
+
+        string extractedField = null;
+
+        if (!string.IsNullOrEmpty(missingFields))
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(
+                missingFields,
+                @"missing required properties, including the following: (\w+)"
+            );
+
+            if (match.Success)
+            {
+                extractedField = match.Groups[1].Value;
+            }
+        }
+
+        var response = new
+        {
+            success = false,
+            message = extractedField != null
+                ? $"Le champ '{extractedField}' est requis."
+                : "Requête invalide. Vérifiez les champs obligatoires."
+        };
+
+        return new BadRequestObjectResult(response);
+    };
+});
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<TranslateException>();
 
 var app = builder.Build();
 
@@ -101,7 +141,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowSpecificOrigin");
 
-//Pas sur qu'il soit n�cessaire
+//Pas sur qu'il soit nécessaire
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

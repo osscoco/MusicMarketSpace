@@ -1,5 +1,7 @@
-﻿using back.Interfaces;
+﻿using back.Dtos.Requests;
+using back.Interfaces;
 using back.Repositories;
+using back.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Common;
@@ -12,9 +14,11 @@ namespace back.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserRepository _userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly TranslateException _translateException;
+        public UserController(IUserRepository userRepository, TranslateException translateException)
         {
             _userRepository = (UserRepository)userRepository;
+            _translateException = translateException;
         }
 
         // GET: api/Users
@@ -28,13 +32,36 @@ namespace back.Controllers
             }
             catch (Exception ex)
             {
-                var statusCode = StatusCode(500, new { error = ex.Message });
-
                 return new ResponseApi<object>
                 {
-                    Success = true,
-                    Data = statusCode,
-                    Message = "Utilisateurs chargés !"
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
+                };
+            }
+        }
+
+        // POST: api/User
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<ResponseApi<object>>> CreateUser([FromBody] UserCreateRequest user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ResponseApi<object>(false, null, "Les données fournies sont invalides");
+            }
+
+            try
+            {
+                return await _userRepository.CreateOneUser(user);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseApi<object>
+                {
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
                 };
             }
         }
