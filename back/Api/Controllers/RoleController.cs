@@ -40,5 +40,30 @@ namespace back.Controllers
                 };
             }
         }
+
+        // POST: api/Role
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<ResponseApi<object>>> CreateRole([FromBody] RoleCreateRequest role)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ResponseApi<object>(false, null, "Les données fournies sont invalides");
+            }
+
+            try
+            {
+                return await _roleRepository.CreateOneRole(role);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseApi<object>
+                {
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
+                };
+            }
+        }
     }
 }

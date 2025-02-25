@@ -7,5 +7,7 @@ namespace back.Interfaces
     public interface IRoleRepository
     {
         public ActionResult<ResponseApi<object>> GetAllRoles();
+        public Task<ActionResult<ResponseApi<object>>> CreateOneRole(RoleCreateRequest role);
+        public Task<bool> RoleExistsByName(string name);
     }
 }
