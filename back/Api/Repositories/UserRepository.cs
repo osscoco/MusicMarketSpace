@@ -30,6 +30,7 @@ namespace back.Repositories
             var users = _context.Users
                 .Select(user => new UserResponse
                 {
+                    UserId = user.UserId, 
                     Pseudo = user.Pseudo,
                     Mail = user.Mail,
                     ContactPhone = user.ContactPhone,
@@ -57,6 +58,7 @@ namespace back.Repositories
 
             User createdUser = new User
             {
+                UserId = Guid.NewGuid(),
                 Pseudo = user.Pseudo,
                 Mail = user.Mail,
                 PasswordHashed = HashString(user.Password),
