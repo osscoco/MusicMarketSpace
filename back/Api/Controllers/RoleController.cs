@@ -1,10 +1,12 @@
 ﻿using back.Dtos.Requests;
+using back.Dtos.Responses;
 using back.Interfaces;
 using back.Repositories;
 using back.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Common;
+using Models.Identity;
 
 namespace back.Controllers
 {
@@ -54,6 +56,31 @@ namespace back.Controllers
             try
             {
                 return await _roleRepository.CreateOneRole(role);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseApi<object>
+                {
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
+                };
+            }
+        }
+
+        // PUT: api/Role/{id}
+        [AllowAnonymous]
+        [HttpPut("{roleId}")]
+        public async Task<ActionResult<ResponseApi<object>>> UpdateUser(Guid roleId, [FromBody] RoleUpdateRequest updatedRole)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ResponseApi<object>(false, null, "Les données fournies sont invalides");
+            }
+
+            try
+            {
+                return await _roleRepository.UpdateOneRole(roleId, updatedRole);
             }
             catch (Exception ex)
             {
