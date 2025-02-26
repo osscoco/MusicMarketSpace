@@ -63,11 +63,49 @@ namespace back.Repositories
         }
         #endregion
 
+        #region UpdateOneRole
+        public async Task<ActionResult<ResponseApi<object>>> UpdateOneRole(Guid roleId, RoleUpdateRequest role)
+        {
+            if (await this.RoleExistsByRoleId(roleId) == false)
+            {
+                return new ResponseApi<object>(false, null, "Le rôle recherché n'existe pas");
+            }
+
+            if (await this.RoleExistsByName(role.Name))
+            {
+                return new ResponseApi<object>(false, null, "Le nouveau nom du rôle existe déjà");
+            }
+
+            if (string.IsNullOrWhiteSpace(role.Name))
+            {
+                return new ResponseApi<object>(false, null, "Le nom du rôle ne doit pas être vide");
+            }
+            else
+            {
+                Role roleUpdated = new Role 
+                { 
+                    RoleId = roleId,
+                    Name = role.Name 
+                };
+
+                _context.Entry(roleUpdated).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+            return new ResponseApi<object>(true, null, "Rôle modifié avec succès");
+        }
+        #endregion
+
         #region Functions personnalisées
         public async Task<bool> RoleExistsByName(string name)
         {
             return await _context.Roles.AnyAsync(u => u.Name == name);
         }
+
+        public async Task<bool> RoleExistsByRoleId(Guid roleId)
+        {
+            return await _context.Roles.AnyAsync(u => u.RoleId == roleId);
+        }        
         #endregion
     }
 }
