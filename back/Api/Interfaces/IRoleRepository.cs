@@ -8,6 +8,8 @@ namespace back.Interfaces
     {
         public ActionResult<ResponseApi<object>> GetAllRoles();
         public Task<ActionResult<ResponseApi<object>>> CreateOneRole(RoleCreateRequest role);
+        public Task<ActionResult<ResponseApi<object>>> UpdateOneRole(Guid roleId, RoleUpdateRequest role);
         public Task<bool> RoleExistsByName(string name);
+        public Task<bool> RoleExistsByRoleId(Guid roleId);
     }
 }

@@ -11,5 +11,7 @@ namespace Models.Identity
         public required string Name { get; set; }
         [JsonIgnore]
         public ICollection<User>? Users { get; set; }
+
+        public Role() { }
     }
 }

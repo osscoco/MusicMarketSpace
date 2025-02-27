@@ -68,7 +68,7 @@ namespace back.Controllers
             }
         }
 
-        // PUT: api/Role/{id}
+        // PUT: api/Role/{roleId}
         [AllowAnonymous]
         [HttpPut("{roleId}")]
         public async Task<ActionResult<ResponseApi<object>>> UpdateUser(Guid roleId, [FromBody] RoleUpdateRequest updatedRole)
@@ -81,6 +81,26 @@ namespace back.Controllers
             try
             {
                 return await _roleRepository.UpdateOneRole(roleId, updatedRole);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseApi<object>
+                {
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
+                };
+            }
+        }
+
+        // DELETE: api/User/{roleId}
+        [AllowAnonymous]
+        [HttpDelete("{roleId}")]
+        public async Task<ActionResult<ResponseApi<object>>> DeleteOneRole(Guid roleId)
+        {
+            try
+            {
+                return await _roleRepository.DeleteOneRole(roleId);
             }
             catch (Exception ex)
             {
