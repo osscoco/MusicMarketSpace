@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Identity;
+using System.Data;
 
 namespace back.Repositories
 {
@@ -80,19 +81,32 @@ namespace back.Repositories
             {
                 return new ResponseApi<object>(false, null, "Le nom du rôle ne doit pas être vide");
             }
-            else
-            {
-                Role roleUpdated = new Role 
-                { 
-                    RoleId = roleId,
-                    Name = role.Name 
-                };
 
-                _context.Entry(roleUpdated).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
+            Role roleUpdated = new Role 
+            { 
+                RoleId = roleId,
+                Name = role.Name 
+            };
+
+            _context.Entry(roleUpdated).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
             return new ResponseApi<object>(true, null, "Rôle modifié avec succès");
+        }
+        #endregion
+
+        #region DeleteOneRole
+        public async Task<ActionResult<ResponseApi<object>>> DeleteOneRole(Guid roleId)
+        {
+            if (await this.RoleExistsByRoleId(roleId) == false)
+            {
+                return new ResponseApi<object>(false, null, "Le rôle recherché n'existe pas");
+            }
+
+            _context.RemoveById<Role>(roleId);
+            await _context.SaveChangesAsync();
+
+            return new ResponseApi<object>(true, null, "Rôle supprimé avec succès");
         }
         #endregion
 
