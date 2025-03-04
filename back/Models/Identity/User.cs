@@ -20,7 +20,7 @@ namespace Models.Identity
         public bool IsSSO { get; set; }
         public Guid RoleId { get; set; }
         [JsonIgnore]
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
         [JsonIgnore]
         public ICollection<UserChoice> Choices { get; set; } = new List<UserChoice>();
 

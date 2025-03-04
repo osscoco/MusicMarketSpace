@@ -15,16 +15,21 @@ namespace back.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
+        #region Attributs
         private readonly RoleRepository _roleRepository;
         private readonly TranslateException _translateException;
+        #endregion
+
+        #region Constructeur
         public RoleController(IRoleRepository roleRepository, TranslateException translateException)
         {
             _roleRepository = (RoleRepository)roleRepository;
             _translateException = translateException;
         }
+        #endregion
 
+        #region GetAllRoles
         // GET: api/Roles
-        [AllowAnonymous]
         [HttpGet]
         public ActionResult<ResponseApi<object>> GetAllRoles()
         {
@@ -42,9 +47,10 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
 
+        #region CreateOneRole
         // POST: api/Role
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<ResponseApi<object>>> CreateOneRole([FromBody] RoleCreateRequest role)
         {
@@ -67,9 +73,10 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
 
+        #region UpdateOneRole
         // PUT: api/Role/{roleId}
-        [AllowAnonymous]
         [HttpPut("{roleId}")]
         public async Task<ActionResult<ResponseApi<object>>> UpdateOneRole(Guid roleId, [FromBody] RoleUpdateRequest updatedRole)
         {
@@ -92,9 +99,10 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
 
+        #region DeleteOneRole
         // DELETE: api/Role/{roleId}
-        [AllowAnonymous]
         [HttpDelete("{roleId}")]
         public async Task<ActionResult<ResponseApi<object>>> DeleteOneRole(Guid roleId)
         {
@@ -112,5 +120,6 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
     }
 }

@@ -9,9 +9,11 @@ namespace Models.Identity
         public Guid UserChoiceId { get; set; }
         public required Guid UserId { get; set; }
         [JsonIgnore]
-        public required User User { get; set; }
+        public User? User { get; set; }
         public required Guid SubChoiceId { get; set; }
         [JsonIgnore]
-        public required SubChoice SubChoice { get; set; }
+        public SubChoice? SubChoice { get; set; }
+
+        public UserChoice() { }
     }
 }

@@ -13,16 +13,21 @@ namespace back.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        #region Attributs
         private readonly UserRepository _userRepository;
         private readonly TranslateException _translateException;
+        #endregion
+
+        #region Constructeur
         public UserController(IUserRepository userRepository, TranslateException translateException)
         {
             _userRepository = (UserRepository)userRepository;
             _translateException = translateException;
         }
+        #endregion
 
+        #region GetAllUsers
         // GET: api/Users
-        [AllowAnonymous]
         [HttpGet]
         public ActionResult<ResponseApi<object>> GetAllUsers()
         {
@@ -40,9 +45,10 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
 
+        #region CreateOneUser
         // POST: api/User
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<ResponseApi<object>>> CreateOneUser([FromBody] UserCreateRequest user)
         {
@@ -65,9 +71,10 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
 
+        #region UpdateOneUser
         // PUT: api/User/{userId}
-        [AllowAnonymous]
         [HttpPut("{userId}")]
         public async Task<ActionResult<ResponseApi<object>>> UpdateOneUser(Guid userId, [FromBody] UserUpdateRequest updatedUser)
         {
@@ -90,9 +97,10 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
 
+        #region DeleteOneUser
         // DELETE: api/User/{userId}
-        [AllowAnonymous]
         [HttpDelete("{userId}")]
         public async Task<ActionResult<ResponseApi<object>>> DeleteOneUser(Guid userId)
         {
@@ -110,5 +118,6 @@ namespace back.Controllers
                 };
             }
         }
+        #endregion
     }
 }

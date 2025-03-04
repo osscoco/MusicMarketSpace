@@ -13,6 +13,8 @@ namespace Models.Identity
 
         public Guid ChoiceId { get; set; }
         [JsonIgnore]
-        public Choice Choice { get; set; }
+        public Choice? Choice { get; set; }
+
+        public SubChoice() { }
     }
 }

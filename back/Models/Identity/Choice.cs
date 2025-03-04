@@ -11,5 +11,7 @@ namespace Models.Identity
         public required string Name { get; set; }
         [JsonIgnore]
         public ICollection<SubChoice> SubChoices { get; set; } = new List<SubChoice>();
+
+        public Choice() { }
     }
 }
