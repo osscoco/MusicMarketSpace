@@ -93,7 +93,7 @@ namespace back.Controllers
             }
         }
 
-        // DELETE: api/User/{roleId}
+        // DELETE: api/Role/{roleId}
         [AllowAnonymous]
         [HttpDelete("{roleId}")]
         public async Task<ActionResult<ResponseApi<object>>> DeleteOneRole(Guid roleId)

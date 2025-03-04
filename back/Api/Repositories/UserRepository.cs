@@ -165,6 +165,21 @@ namespace back.Repositories
         }
         #endregion
 
+        #region DeleteOneUser
+        public async Task<ActionResult<ResponseApi<object>>> DeleteOneUser(Guid userId)
+        {
+            if (await this.UserExistsByUserId(userId) == false)
+            {
+                return new ResponseApi<object>(false, null, "L'utilisateur recherché n'existe pas");
+            }
+
+            _context.RemoveById<User>(userId);
+            await _context.SaveChangesAsync();
+
+            return new ResponseApi<object>(true, null, "Utilisateur supprimé avec succès");
+        }
+        #endregion
+
         #region Functions personnalisées
         public async Task<bool> UserExistsByEmail(string email)
         {
