@@ -51,9 +51,24 @@ namespace back.Repositories
         #region CreateOneUser
         public async Task<ActionResult<ResponseApi<object>>> CreateOneUser(UserCreateRequest user)
         {
+            if (await this.UserExistsByPseudo(user.Pseudo))
+            {
+                return new ResponseApi<object>(false, null, "Le pseudo de l'utilisateur est déjà utilisé par un autre compte");
+            }
+
             if (await this.UserExistsByEmail(user.Mail))
             {
-                return new ResponseApi<object>(false, null, "L'utilisateur existe déjà");
+                return new ResponseApi<object>(false, null, "L'email de l'utilisateur est déjà utilisé par un autre compte");
+            }
+
+            if (string.IsNullOrWhiteSpace(user.Password))
+            {
+                return new ResponseApi<object>(false, null, "Le mot de passe ne doit pas être vide");
+            }
+
+            if (!string.IsNullOrWhiteSpace(user.ContactPhone) && await this.UserExistsByContactPhone(user.ContactPhone))
+            {
+                return new ResponseApi<object>(false, null, "Le numéro de téléphone de l'utilisateur est déjà utilisé par un autre compte");
             }
 
             User createdUser = new User
@@ -74,10 +89,105 @@ namespace back.Repositories
         }
         #endregion
 
+        #region UpdateOneUser
+        public async Task<ActionResult<ResponseApi<object>>> UpdateOneUser(Guid userId, UserUpdateRequest user)
+        {
+            if (await this.UserExistsByUserId(userId) == false)
+            {
+                return new ResponseApi<object>(false, null, "L'utilisateur recherché n'existe pas");
+            }
+
+            if (await this.UserExistsByPseudo(user.Pseudo))
+            {
+                return new ResponseApi<object>(false, null, "Le nouveau pseudo de l'utilisateur existe déjà");
+            }
+
+            if (await this.UserExistsByEmail(user.Mail))
+            {
+                return new ResponseApi<object>(false, null, "Le nouvel email de l'utilisateur existe déjà");
+            } 
+
+            if (await this.UserExistsByContactPhone(user.ContactPhone))
+            {
+                return new ResponseApi<object>(false, null, "Le nouveau numéro de téléphone de l'utilisateur existe déjà");
+            }
+
+            if (userId == Guid.Empty)
+            {
+                return new ResponseApi<object>(false, null, "L'identifiant de l'utilisateur ne doit pas être vide");
+            }
+
+            if (string.IsNullOrWhiteSpace(user.Pseudo))
+            {
+                return new ResponseApi<object>(false, null, "Le pseudo de l'utilisateur ne doit pas être vide");
+            }
+
+            if (string.IsNullOrWhiteSpace(user.Mail))
+            {
+                return new ResponseApi<object>(false, null, "L'email de l'utilisateur ne doit pas être vide");
+            }
+
+            if (string.IsNullOrWhiteSpace(HashString(user.PasswordHashed)))
+            {
+                return new ResponseApi<object>(false, null, "Le Mot de Passe de l'utilisateur ne doit pas être vide");
+            }
+
+            if (user.RoleId == Guid.Empty)
+            {
+                return new ResponseApi<object>(false, null, "Le rôle de l'utilisateur ne doit pas être vide");
+            }
+
+            if (await this.UserMatchByPasswordHashed(userId, HashString(user.PasswordHashed)) == false)
+            {
+                return new ResponseApi<object>(false, null, "Le Mot de Passe de l'utilisateur n'est pas valide");
+            }
+
+            if (string.IsNullOrWhiteSpace(user.ContactPhone))
+            {
+                return new ResponseApi<object>(false, null, "Le numéro de téléphone de l'utilisateur ne doit pas être vide");
+            }
+
+            User userUpdated = new User
+            {
+                UserId = userId,
+                Pseudo = user.Pseudo,
+                Mail = user.Mail,
+                PasswordHashed = user.PasswordHashed,
+                ContactPhone = user.ContactPhone,
+                IsSSO = user.IsSSO,
+                RoleId = user.RoleId
+            };
+
+            _context.Entry(userUpdated).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return new ResponseApi<object>(true, null, "Utilisateur modifié avec succès");
+        }
+        #endregion
+
         #region Functions personnalisées
         public async Task<bool> UserExistsByEmail(string email)
         {
             return await _context.Users.AnyAsync(u => u.Mail == email);
+        }
+
+        public async Task<bool> UserExistsByPseudo(string pseudo)
+        {
+            return await _context.Users.AnyAsync(u => u.Pseudo == pseudo);
+        }
+
+        public async Task<bool> UserExistsByContactPhone(string contactPhone)
+        {
+            return await _context.Users.AnyAsync(u => u.ContactPhone == contactPhone);
+        }
+
+        public async Task<bool> UserExistsByUserId(Guid userId)
+        {
+            return await _context.Users.AnyAsync(u => u.UserId == userId);
+        }
+        public async Task<bool> UserMatchByPasswordHashed(Guid userId, string passwordHashed)
+        {
+            return await _context.Users.AnyAsync(u => u.UserId == userId && u.PasswordHashed == passwordHashed);
         }
 
         public string HashString(string input)
