@@ -90,5 +90,25 @@ namespace back.Controllers
                 };
             }
         }
+
+        // DELETE: api/User/{userId}
+        [AllowAnonymous]
+        [HttpDelete("{userId}")]
+        public async Task<ActionResult<ResponseApi<object>>> DeleteOneUser(Guid userId)
+        {
+            try
+            {
+                return await _userRepository.DeleteOneUser(userId);
+            }
+            catch (Exception ex)
+            {
+                return new ResponseApi<object>
+                {
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
+                };
+            }
+        }
     }
 }
