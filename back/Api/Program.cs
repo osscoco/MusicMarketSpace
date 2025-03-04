@@ -1,4 +1,5 @@
 ﻿using back.Interfaces;
+using back.Middlewares;
 using back.Repositories;
 using back.Services;
 using EFCore;
@@ -137,6 +138,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 #endregion
 
 #region References Repository Configuration
+builder.Services.AddSingleton<Token>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -151,6 +153,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<TokenRevocation>();
 
 app.UseCors("AllowSpecificOrigin");
 
