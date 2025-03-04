@@ -88,5 +88,50 @@ namespace back.Controllers
             }
         }
         #endregion
+
+        #region GetAuthMe
+        [HttpGet("getAuthMe")]
+        public ResponseApi<object> GetAuthMe()
+        {
+            try
+            {
+                var user = HttpContext.User;
+
+                if (!user.Identity.IsAuthenticated)
+                {
+                    return new ResponseApi<object>
+                    {
+                        Success = false,
+                        Data = Unauthorized(new { message = "Vous n'êtes pas authentifié." }),
+                        Message = "Vous n'êtes pas authentifié"
+                    };
+                }
+
+                var emailUserInfo = "";
+
+                foreach (var (item, index) in user.Claims.Select((value, i) => (value, i)))
+                {
+                    if (index == 0)
+                        emailUserInfo = item.Value;
+                }
+
+                return new ResponseApi<object>
+                {
+                    Success = true,
+                    Data = Ok(emailUserInfo),
+                    Message = "Vous êtes authentifié"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseApi<object>
+                {
+                    Success = false,
+                    Data = StatusCode(500, new { error = this._translateException.TranslateExceptionEnToFr(ex) }),
+                    Message = "" + this._translateException.TranslateExceptionEnToFr(ex)
+                };
+            } 
+        }
+        #endregion
     }
 }
