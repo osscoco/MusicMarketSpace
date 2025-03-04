@@ -3,5 +3,7 @@
     public class RoleCreateRequest
     {
         public required string Name { get; set; }
+
+        public RoleCreateRequest() { }
     }
 }

@@ -16,7 +16,6 @@
             }
         }
 
-        // Constructeur avec paramètres
         public ResponseApi(bool success, T? data, string? message = null)
         {
             Success = success;
@@ -24,7 +23,6 @@
             Message = message;
         }
 
-        // Constructeur par défaut
         public ResponseApi() { }
     }
 }

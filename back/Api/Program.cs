@@ -13,6 +13,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Cors Configuration
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -22,10 +23,12 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowCredentials());
 });
+#endregion
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+#region Swagger Configuration
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -55,7 +58,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+#endregion
 
+#region BearerToken Configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -79,8 +84,9 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
+#endregion
 
-// Injection Services
+#region SQL Configuration
 var serverVersion = new MySqlServerVersion(new Version(8, 3, 0));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -89,7 +95,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         serverVersion
     )
 );
+#endregion
 
+#region Validator Configuration
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -126,10 +134,14 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
         return new BadRequestObjectResult(response);
     };
 });
+#endregion
 
+#region References Repository Configuration
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<TranslateException>();
+#endregion
 
 var app = builder.Build();
 

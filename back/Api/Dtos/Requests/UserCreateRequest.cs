@@ -10,6 +10,8 @@ namespace back.Dtos.Requests
         public required string Password { get; set; }
         public string? ContactPhone { get; set; }
         public bool IsSSO { get; set; }
-        public Guid RoleId { get; set; }        
+        public Guid RoleId { get; set; }
+
+        public UserCreateRequest() { }
     }
 }
