@@ -46,7 +46,7 @@ namespace back.Controllers
         // POST: api/Role
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<ResponseApi<object>>> CreateRole([FromBody] RoleCreateRequest role)
+        public async Task<ActionResult<ResponseApi<object>>> CreateOneRole([FromBody] RoleCreateRequest role)
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace back.Controllers
         // PUT: api/Role/{roleId}
         [AllowAnonymous]
         [HttpPut("{roleId}")]
-        public async Task<ActionResult<ResponseApi<object>>> UpdateUser(Guid roleId, [FromBody] RoleUpdateRequest updatedRole)
+        public async Task<ActionResult<ResponseApi<object>>> UpdateOneRole(Guid roleId, [FromBody] RoleUpdateRequest updatedRole)
         {
             if (!ModelState.IsValid)
             {
