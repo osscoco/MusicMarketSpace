@@ -1,0 +1,14 @@
+.mt-20 {
+    margin-top: 20%;
+}
+
+.ml-20 {
+    margin-left: 10%;
+}
+
+// Pour les écrans smartphones de niveau 1 (exemple : Iphone 4)
+@media (min-width: 320px) and (max-width: 480px) {
+    .mt-20 {
+        margin-top: 70%;
+    }
+}

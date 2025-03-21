@@ -1,0 +1,16 @@
+<div class="global-container">
+
+    <!-- Si l'utilisateur n'est pas connecté, on affiche la navbar anonyme -->
+    @if (!this.authService.isAuthenticated()) {
+    <app-navbar-anonymous></app-navbar-anonymous>
+
+    <!-- Sinon, on affiche la navbar authenticated -->
+    } @else {
+    <app-navbar-authenticated></app-navbar-authenticated>
+    }
+    <div class="mt-20 ml-20">
+
+        <!-- Composant enfant : home -->
+        <router-outlet></router-outlet>
+    </div>
+</div>

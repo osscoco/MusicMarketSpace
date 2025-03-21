@@ -1,0 +1,174 @@
+<!-- Navbar de l'utilisateur anonyme non connecté -->
+<nav>
+  <h2 class="global-logo-white"><a href="/">Music Market <span class="global-color-red"> Space</span></a></h2> <!-- Musixia, Tunexus, Soundora, Vibraze, Melodify, Sinalio, Lysila, Soria -->
+  <ul>
+    <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right mb-10 d-flex flex-row align-items-center">
+      <small>Help</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">help</i>
+    </button>
+    <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column">
+      <i class="material-icons">help</i> <small class="mb-2"></small> <small>Help</small>
+    </button>
+    <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right mb-10 d-flex flex-row align-items-center" data-bs-toggle="modal" data-bs-target="#LoginModal">
+      <small>Log In</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">login</i>
+    </button>
+    <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column" data-bs-toggle="modal" data-bs-target="#LoginModal">
+      <i class="material-icons">login</i> <small class="mb-2"></small> <small>Log In</small>
+    </button>
+    <button *ngIf="isMobileOrTablet" type="button" class="global-color-white d-flex flex-row align-items-center" data-bs-toggle="modal" data-bs-target="#SignupModal">
+      <small>Sign Up</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">person_add</i>
+    </button>
+    <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white d-flex flex-column" data-bs-toggle="modal" data-bs-target="#SignupModal">
+      <i class="material-icons">person_add</i> <small class="mb-2"></small> <small>Sign Up</small>
+    </button>
+  </ul>
+</nav>
+  
+<!-- Modal du formulaire Login (Utilisation de Bootstrap) -->
+<div #modalElementLogin class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog mt-10">
+    <div class="modal-content height-30vh">
+      <div class="modal-header" style="border-bottom: none;">
+        <button type="button" class="global-color-black" data-bs-dismiss="modal" (click)="closeModalLogin()">
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+      <div class="align-self-center mb-4">
+        <img src="assets/imgs/logo.png" alt="" width="72" height="57">
+      </div>
+      <div class="align-self-center mb-3">
+        <h2 class="global-logo-black">Log In</h2>
+      </div>
+      <div class="align-self-center">
+
+        <!-- Formulaire Login -->
+        <form class="justify-items-center" [formGroup]="formGroupLogin" (ngSubmit)="OnSubmitLogin()">
+          <div class="mb-3">
+            <label for="email" class="form-label">Mail</label>
+            <input id="email" type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalidAndTouchedOrDirty(formGroupLogin.controls.email)"/>
+            @if (isInvalidAndTouchedOrDirty(formGroupLogin.controls.email)) {
+              <small class="text-danger">
+                @if (formGroupLogin.controls.email.hasError("required")) {
+                  <ng-container>
+                    Mail is required !
+                  </ng-container>
+                }
+              </small>
+              <small class="text-danger">
+                @if (formGroupLogin.controls.email.hasError("email")) {
+                  <ng-container>
+                    Mail format is invalid !
+                  </ng-container>
+                }
+              </small>
+            }
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control" formControlName="password" [class.is-invalid]="isInvalidAndTouchedOrDirty(formGroupLogin.controls.password)"/>
+            @if (isInvalidAndTouchedOrDirty(formGroupLogin.controls.password)) {
+              <small class="text-danger">
+                @if (formGroupLogin.controls.password.hasError("required")) {
+                <ng-container>
+                  Password is required !
+                </ng-container>
+                }
+                @if (formGroupLogin.controls.password.hasError("minlength")) {
+                  <ng-container>
+                    5 characters min !
+                  </ng-container>
+                }
+              </small>
+            }
+          </div>
+          <button type="submit" class="global-color-white align-self-center mt-3 mb-3 d-flex flex-row align-items-center">
+            <small class="global-color-black">Log In</small> <small>&nbsp; &nbsp;</small> <i class="material-icons global-color-black">login</i>
+          </button>
+        </form>
+        <!-- Fin du formulaire Login -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal du formulaire Signup (Utilisation de Bootstrap) -->
+<div #modalElementSignup class="modal fade" id="SignupModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog" [ngClass]="{'mt-10': isMobileOrTablet, 'mt-7': !isMobileOrTablet }">
+    <div class="modal-content height-30vh">
+      <div class="modal-header" style="border-bottom: none;">
+        <button type="button" class="global-color-black" data-bs-dismiss="modal" (click)="closeModalSignup()">
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+      <div class="align-self-center mb-4">
+        <img src="assets/imgs/logo.png" alt="" width="72" height="57">
+      </div>
+      <div class="align-self-center mb-3">
+        <h2 class="global-logo-black">Sign Up</h2>
+      </div>
+      <div class="align-self-center">
+
+        <!-- Formulaire Signup -->
+        <form class="justify-items-center" [formGroup]="formGroupSignup" (ngSubmit)="OnSubmitSignup()">
+          <div class="mb-3">
+            <label for="pseudo" class="form-label">Pseudo</label>
+            <input id="pseudo" type="text" class="form-control" formControlName="pseudo" [class.is-invalid]="isInvalidAndTouchedOrDirty(formGroupSignup.controls.pseudo)"/>
+            @if (isInvalidAndTouchedOrDirty(formGroupSignup.controls.pseudo)) {
+              <small class="text-danger">
+                @if (formGroupSignup.controls.email.hasError("required")) {
+                  <ng-container>
+                    Pseudo is required !
+                  </ng-container>
+                }
+              </small>
+            }
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Mail</label>
+            <input id="email" type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalidAndTouchedOrDirty(formGroupSignup.controls.email)"/>
+            @if (isInvalidAndTouchedOrDirty(formGroupSignup.controls.email)) {
+              <small class="text-danger">
+                @if (formGroupSignup.controls.email.hasError("required")) {
+                  <ng-container>
+                    Mail is required !
+                  </ng-container>
+                }
+              </small>
+              <small class="text-danger">
+                @if (formGroupSignup.controls.email.hasError("email")) {
+                  <ng-container>
+                    Mail format is invalid !
+                  </ng-container>
+                }
+              </small>
+            }
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control" formControlName="password" [class.is-invalid]="isInvalidAndTouchedOrDirty(formGroupSignup.controls.password)"/>
+            @if (isInvalidAndTouchedOrDirty(formGroupSignup.controls.password)) {
+              <small class="text-danger">
+                @if (formGroupSignup.controls.password.hasError("required")) {
+                <ng-container>
+                  Password is required !
+                </ng-container>
+                }
+                @if (formGroupSignup.controls.password.hasError("minlength")) {
+                  <ng-container>
+                    5 characters min !
+                  </ng-container>
+                }
+              </small>
+            }
+          </div>
+          <button type="submit" class="global-color-white align-self-center mt-3 mb-3 d-flex flex-row align-items-center">
+            <small class="global-color-black">Sign Up</small> <small>&nbsp; &nbsp;</small> <i class="material-icons global-color-black">person_add</i>
+          </button>
+        </form>
+        <!-- Fin du formulaire Signup -->
+                  
+      </div>
+    </div>
+  </div>
+</div>

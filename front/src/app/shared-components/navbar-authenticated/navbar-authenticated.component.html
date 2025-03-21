@@ -1,0 +1,30 @@
+<!-- Navbar de l'utilisateur connecté -->
+<nav>
+    <h2 class="global-logo-white"><a href="/">Music Market <span class="global-color-red"> Space</span></a></h2>
+    <ul>
+      <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right mb-10 d-flex flex-row align-items-center">
+        <small>Help</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">help</i>
+      </button>
+      <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column">
+        <i class="material-icons">help</i> <small class="mb-2"></small> <small>Help</small>
+      </button>
+      <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right mb-10 d-flex flex-row align-items-center">
+        <small>Account</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">person</i>
+      </button>
+      <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column">
+        <i class="material-icons">person</i> <small class="mb-2"></small> <small>Account</small>
+      </button>
+      <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right mb-10 d-flex flex-row align-items-center">
+        <small>Settings</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">settings</i>
+      </button>
+      <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column">
+        <i class="material-icons">settings</i> <small class="mb-2"></small> <small>Settings</small>
+      </button>
+      <button *ngIf="isMobileOrTablet" type="button" class="global-color-white d-flex flex-row align-items-center" (click)="logout()">
+        <small>Déconnexion</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">logout</i>
+      </button>
+      <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white d-flex flex-column" (click)="logout()">
+        <i class="material-icons">logout</i> <small class="mb-2"></small> <small>Déconnexion</small>
+      </button>
+    </ul>
+</nav>

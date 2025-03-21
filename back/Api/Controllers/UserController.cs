@@ -49,6 +49,7 @@ namespace back.Controllers
 
         #region CreateOneUser
         // POST: api/User
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<ResponseApi<object>>> CreateOneUser([FromBody] UserCreateRequest user)
         {

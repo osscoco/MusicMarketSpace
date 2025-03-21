@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+}
+
+//Anonymous-container && Auth-container
+.global-container {
+    height: 100vh;
+	width: 100%;
+	background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(/assets/imgs/bg.png);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+	background-size: cover;
+	background-position: center;
+    position: absolute;
+}
+
+//Logos
+.global-logo-white {
+	color: white;
+	font-size: 20px;
+    transition: .4s;
+}
+
+.global-logo-white:hover {
+    transform: scale(1.3);
+    cursor: pointer;
+}
+
+.global-logo-black {
+	color: rgb(0, 0, 0);
+	font-size: 20px;
+    transition: .4s;
+}
+
+.global-logo-black:hover {
+	transform: scale(1.3);
+    cursor: pointer;
+}
+
+//Colors
+.global-color-white {
+    color: white;
+}
+
+.global-color-black {
+    color: black;
+}
+
+.global-color-red {
+	color: #ea1538;
+}
+
+.global-color-green {
+	color: #15ea3c;
+}
+
+.global-color-blue {
+	color: #2315ea;
+}

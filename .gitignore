@@ -47,8 +47,10 @@ front/.DS_Store
 front/Thumbs.db
 
 # Angular Environments
-front/src/environments/*.ts
-!front/src/environments/environment.prod.ts
+front/src/environments/environment.ts
+front/src/environments/environment.local.ts
+front/src/environments/environment.preproduction.ts
+front/src/environments/environment.production.ts
 
 ## Backend (ASP.NET Core)
 back/EFCore/bin/

@@ -29,12 +29,18 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss", 
+              "src/assets/css/bootstrap_5.2.3.css",
+              "src/assets/css/bootstrap_icons_1.11.3.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/popper_min_5.2.3.js",
+              "src/assets/js/bootstrap_5.2.3.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -50,15 +56,38 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ]
             },
-            "development": {
+            "preproduction": {
+              "optimization": true,
+              "extractLicenses": true,
+              "sourceMap": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.preproduction.ts"
+                }
+              ]
+            },
+            "local": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "local"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -66,11 +95,14 @@
             "production": {
               "buildTarget": "front:build:production"
             },
-            "development": {
-              "buildTarget": "front:build:development"
+            "preproduction": {
+              "buildTarget": "front:build:preproduction"
+            },
+            "local": {
+              "buildTarget": "front:build:local"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
