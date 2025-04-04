@@ -75,44 +75,23 @@ button:hover {
 	cursor: pointer;
 }
 
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
 .button-margin-right {
 	margin-right: 3vh;
 }
 
-//Alignements
-.justify-items-center {
-	justify-items: center;
+//Paddings Block
+.padding-block-5 {
+	padding-block: 5%;
 }
 
-.align-self-center {
-	align-self: center;
-}
-
-.align-items-center {
-	align-items: center;
-}
-
-//Marges
-.mt-3 {
-	margin-top: 3%;
-}
-
-.mt-7 {
-	margin-top: 7%;
-}
-
-.mt-10 {
-	margin-top: 10%;
-}
-
-.mb-1 {
-	margin-bottom: 1%;
-}
-
-.mb-5 {
-	margin-bottom: 5%;
-}
-
-.mb-10 {
-	margin-bottom: 10%;
+//Modal centré
+.centered {
+	display: flex;
+    align-items: center;
+    min-height: calc(100% - var(--bs-modal-margin)* 2);
 }

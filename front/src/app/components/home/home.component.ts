@@ -3,11 +3,12 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-
+  
   // Constructeur
-  constructor(protected authService: AuthService) {}
+  constructor(protected authService: AuthService) {}  
 }
