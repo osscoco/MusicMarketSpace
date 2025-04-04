@@ -1,0 +1,23 @@
+.toast-container {
+    z-index: 1050; /* Assurez-vous qu'il est au-dessus des autres éléments */
+    pointer-events: none; /* Permet aux clics de passer à travers */
+}
+
+.toast {
+    pointer-events: auto; /* Permet de cliquer sur les boutons à l'intérieur */
+    opacity: 0; /* Initialement transparent */
+    transform: translateY(20px); /* Le toast commence légèrement en bas */
+    transition: opacity 1s ease, transform 1s ease; /* Transition douce sur la transparence et la position */
+}
+
+.toast.show {
+    opacity: 1; /* Rend le toast opaque */
+    transform: translateY(0); /* Déplace le toast à sa position normale */
+  }
+  
+  /* Optionnel : Animation pour la disparition */
+  .toast.hide {
+    opacity: 0; /* Rendre le toast transparent */
+    transform: translateY(20px); /* Remettre le toast en bas avant de disparaître */
+    transition: opacity 1s ease, transform 1s ease; /* Transition douce pour la disparition */
+  }

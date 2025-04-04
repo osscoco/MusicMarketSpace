@@ -2,12 +2,14 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild }
 import { Modal } from 'bootstrap';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { EmailValidators } from '../../validators/email-validators';
 
 @Component({
   selector: 'app-navbar-anonymous',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgClass],
+  imports: [ReactiveFormsModule, NgIf, NgClass, NgStyle, MatButtonModule],
   templateUrl: './navbar-anonymous.component.html',
   styleUrl: './navbar-anonymous.component.scss'
 })
@@ -45,14 +47,14 @@ export class NavbarAnonymousComponent implements OnInit, AfterViewInit {
 
   // Formulaire Login
   formGroupLogin = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.email]),
+    email: new FormControl("", [Validators.required, EmailValidators.emailFormat]),
     password: new FormControl("", [Validators.required, Validators.minLength(5)]) 
   });
 
   // Formulaire Signup
   formGroupSignup = new FormGroup({
     pseudo: new FormControl("", [Validators.required]),
-    email: new FormControl("", [Validators.required, Validators.email]),
+    email: new FormControl("", [Validators.required, EmailValidators.emailFormat]),
     password: new FormControl("", [Validators.required, Validators.minLength(5)]) 
   });
 
@@ -61,6 +63,9 @@ export class NavbarAnonymousComponent implements OnInit, AfterViewInit {
     return formControl.invalid && (formControl.touched ||formControl.dirty);
   }
 
+  /// ---
+  /// --- Cette partie est diédiée au bon affichage des éléments du menu navbar en fonction du support (PC, Tablette, Mobile)
+  /// ---
   ngOnInit(): void {
     this.checkViewport();
   }
@@ -74,6 +79,9 @@ export class NavbarAnonymousComponent implements OnInit, AfterViewInit {
     const width = window.innerWidth;
     this.isMobileOrTablet = width >= 320 && width <= 480;
   }
+  /// ---
+  /// --- Fin de la partie dédiée
+  /// ---
 
   // Après avoir chargé la vue du composant, on initialise une nouvelle instance du modal pour le faire apparaitre
   ngAfterViewInit() {
@@ -90,18 +98,13 @@ export class NavbarAnonymousComponent implements OnInit, AfterViewInit {
   // Une fois le formulaire Login soumis
   async OnSubmitLogin() {
     this.formGroupLogin.markAllAsTouched();
+    this.modalInstanceLogin.hide();
+    this.removeBackDropModalFromDOM();
     if (this.formGroupLogin.invalid) {
       return;
     } else {
-      try {
-        if (this.formGroupLogin.value.email! && this.formGroupLogin.value.password!) {
-          const result = await this.authService.login(this.formGroupLogin.value.email, this.formGroupLogin.value.password);
-          if (result) {
-            window.location.reload();
-          }
-        }
-      } catch (error) {
-        alert('Email / Mot de passe incorrect');
+      if (this.formGroupLogin.value.email! && this.formGroupLogin.value.password!) {
+        await this.authService.login(this.formGroupLogin.value.email, this.formGroupLogin.value.password);
       }
     }
   }
@@ -115,15 +118,14 @@ export class NavbarAnonymousComponent implements OnInit, AfterViewInit {
   // Une fois le formulaire Signup soumis
   async OnSubmitSignup() {
     this.formGroupSignup.markAllAsTouched();
+    this.modalInstanceLogin.hide();
+    this.removeBackDropModalFromDOM();
     if (this.formGroupSignup.invalid) {
       return;
     } else {
       try {
         if (this.formGroupSignup.value.pseudo! &&this.formGroupSignup.value.email! && this.formGroupSignup.value.password!) {
-          const result = await this.authService.signup(this.formGroupSignup.value.pseudo, this.formGroupSignup.value.email, this.formGroupSignup.value.password);
-          if (result) {
-            window.location.reload();
-          }
+          await this.authService.signup(this.formGroupSignup.value.pseudo, this.formGroupSignup.value.email, this.formGroupSignup.value.password);
         }
       } catch (error) {
         alert('Erreur de création de compte');
@@ -135,5 +137,10 @@ export class NavbarAnonymousComponent implements OnInit, AfterViewInit {
   closeModalSignup() {
     this.formGroupSignup.markAsUntouched();
     this.modalInstanceSignup.hide();
+  }
+
+  removeBackDropModalFromDOM() {
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
   }
 }

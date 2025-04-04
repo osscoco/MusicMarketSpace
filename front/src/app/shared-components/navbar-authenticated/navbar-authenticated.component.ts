@@ -17,6 +17,9 @@ export class NavbarAuthenticatedComponent implements OnInit {
   // Constructeur
   constructor(protected authService: AuthService) {}
 
+  /// ---
+  /// --- Cette partie est diédiée au bon affichage des éléments du menu navbar en fonction du support (PC, Tablette, Mobile)
+  /// ---
   ngOnInit(): void {
     this.checkViewport();
   }
@@ -30,10 +33,12 @@ export class NavbarAuthenticatedComponent implements OnInit {
     const width = window.innerWidth;
     this.isMobileOrTablet = width >= 320 && width <= 480;
   }
+  /// ---
+  /// --- Fin de la partie dédiée
+  /// ---
     
   // Une fois le click sur le bouton de déconnexion
   async logout() {
     await this.authService.logout();
-    window.location.reload();
   }
 }
