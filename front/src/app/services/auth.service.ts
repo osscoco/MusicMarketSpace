@@ -103,4 +103,9 @@ export class AuthService {
   isAuthenticated(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
+
+  // Vérification si l'utilisateur courant est admin
+  isAdmin(): boolean {
+    return localStorage.getItem('isAdmin') === 'true';
+  }
 }

@@ -44,6 +44,12 @@
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "aot": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -56,7 +62,6 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -66,8 +71,23 @@
             },
             "preproduction": {
               "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": true,
               "extractLicenses": true,
-              "sourceMap": false,
+              "aot": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -77,8 +97,11 @@
             },
             "local": {
               "optimization": false,
-              "extractLicenses": false,
+              "outputHashing": "none",
               "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "aot": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
