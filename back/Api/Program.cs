@@ -147,6 +147,24 @@ builder.Services.AddScoped<TranslateException>();
 
 var app = builder.Build();
 
+#region Middleware CSP
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Content-Security-Policy",
+        "default-src 'self'; " +                             // Charger uniquement depuis le même domaine
+        "script-src 'self' 'unsafe-inline'; " +              // Permettre les scripts inline (nécessaire pour Angular)
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " + // Autoriser Google Fonts en développement
+        "font-src 'self' https://fonts.gstatic.com; " +      // Charger les polices depuis Google Fonts
+        "img-src 'self' data:; " +                           // Autoriser les images depuis le même domaine et data URIs
+        "connect-src 'self'; " +                             // Autoriser les connexions (API, WebSockets) depuis le même domaine
+        "object-src 'none'; " +                              // Désactiver les objets embarqués (Flash, etc.)
+        "frame-ancestors 'none'; " +                         // Interdire l'intégration dans un iframe
+        "base-uri 'self';");                                 // Permettre les URI de base uniquement depuis le même domaine
+
+    await next();
+});
+#endregion
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
