@@ -24,7 +24,7 @@ export class ToastService {
     }, 10);
 
     // Supprimer automatiquement la notification après 5s d'attente
-    setTimeout(() => this.remove(message), 3000);
+    setTimeout(() => this.remove(message), 2000);
   }
 
   // Supprimer la notification

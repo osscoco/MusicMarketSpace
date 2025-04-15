@@ -33,9 +33,7 @@ namespace back.Repositories
                     UserId = user.UserId, 
                     Pseudo = user.Pseudo,
                     Mail = user.Mail,
-                    ContactPhone = user.ContactPhone,
-                    IsSSO = user.IsSSO,
-                    RoleId = user.RoleId
+                    ContactPhone = user.ContactPhone
                 })
                 .ToList();
 
@@ -45,6 +43,23 @@ namespace back.Repositories
                 Data = users,
                 Message = "Utilisateurs chargés !"
             };
+        }
+        #endregion
+
+        #region GetOneUserByEmail
+        public async Task<ActionResult<UserResponse>> GetOneUserByEmail(string email)
+        {
+            var user = await _context.Users
+                .Select(user => new UserResponse
+                {
+                    UserId = user.UserId,
+                    Pseudo = user.Pseudo,
+                    Mail = user.Mail,
+                    ContactPhone = user.ContactPhone
+                })
+                .FirstOrDefaultAsync(u => u.Mail == email);
+
+            return user!;
         }
         #endregion
 
@@ -66,20 +81,12 @@ namespace back.Repositories
                 return new ResponseApi<object>(false, null, "Le mot de passe ne doit pas être vide");
             }
 
-            if (!string.IsNullOrWhiteSpace(user.ContactPhone) && await this.UserExistsByContactPhone(user.ContactPhone))
-            {
-                return new ResponseApi<object>(false, null, "Le numéro de téléphone de l'utilisateur est déjà utilisé par un autre compte");
-            }
-
             User createdUser = new User
             {
                 UserId = Guid.NewGuid(),
                 Pseudo = user.Pseudo,
                 Mail = user.Mail,
-                PasswordHashed = HashString(user.Password),
-                ContactPhone = user.ContactPhone,
-                IsSSO = user.IsSSO,
-                RoleId = user.RoleId
+                PasswordHashed = HashString(user.Password)
             };
 
             _context.Users.Add(createdUser);
@@ -132,11 +139,6 @@ namespace back.Repositories
                 return new ResponseApi<object>(false, null, "Le Mot de Passe de l'utilisateur ne doit pas être vide");
             }
 
-            if (user.RoleId == Guid.Empty)
-            {
-                return new ResponseApi<object>(false, null, "Le rôle de l'utilisateur ne doit pas être vide");
-            }
-
             if (await this.UserMatchByPasswordHashed(userId, HashString(user.PasswordHashed)) == false)
             {
                 return new ResponseApi<object>(false, null, "Le Mot de Passe de l'utilisateur n'est pas valide");
@@ -153,9 +155,7 @@ namespace back.Repositories
                 Pseudo = user.Pseudo,
                 Mail = user.Mail,
                 PasswordHashed = user.PasswordHashed,
-                ContactPhone = user.ContactPhone,
-                IsSSO = user.IsSSO,
-                RoleId = user.RoleId
+                ContactPhone = user.ContactPhone
             };
 
             _context.Entry(userUpdated).State = EntityState.Modified;

@@ -38,22 +38,6 @@ namespace EFCore.Migrations
                     b.ToTable("Choices");
                 });
 
-            modelBuilder.Entity("Models.Identity.Role", b =>
-                {
-                    b.Property<Guid>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("Models.Identity.SubChoice", b =>
                 {
                     b.Property<Guid>("SubChoiceId")
@@ -88,9 +72,6 @@ namespace EFCore.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<bool>("IsSSO")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -118,8 +99,6 @@ namespace EFCore.Migrations
 
                     b.HasIndex("Pseudo")
                         .IsUnique();
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -156,17 +135,6 @@ namespace EFCore.Migrations
                     b.Navigation("Choice");
                 });
 
-            modelBuilder.Entity("Models.Identity.User", b =>
-                {
-                    b.HasOne("Models.Identity.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Models.Identity.UserChoice", b =>
                 {
                     b.HasOne("Models.Identity.SubChoice", "SubChoice")
@@ -189,11 +157,6 @@ namespace EFCore.Migrations
             modelBuilder.Entity("Models.Identity.Choice", b =>
                 {
                     b.Navigation("SubChoices");
-                });
-
-            modelBuilder.Entity("Models.Identity.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Models.Identity.User", b =>

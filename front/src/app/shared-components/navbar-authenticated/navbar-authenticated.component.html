@@ -8,12 +8,6 @@
       <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column">
         <i class="material-icons">help</i> <small class="global-mb-31"></small> <small>Aide</small>
       </button>
-      <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right global-mb-10 d-flex flex-row global-align-items-center" (click)="admin()">
-        <small>Admin</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">admin_panel_settings</i>
-      </button>
-      <button *ngIf="!isMobileOrTablet" type="button" class="global-color-white button-margin-right d-flex flex-column" (click)="admin()">
-        <i class="material-icons">admin_panel_settings</i> <small class="global-mb-23"></small> <small>Admin</small>
-      </button>
       <button *ngIf="isMobileOrTablet" type="button" class="global-color-white button-margin-right global-mb-10 d-flex flex-row global-align-items-center">
         <small>Compte</small> <small>&nbsp; &nbsp;</small> <i class="material-icons">person</i>
       </button>

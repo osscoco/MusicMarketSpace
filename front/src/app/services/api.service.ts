@@ -24,6 +24,11 @@ export class ApiService {
     return this.http.post<any>(this.apiUrl + 'User', postData);
   }
 
+  // Connaitre l'utilisateur connecté : Appel à l'Api Backend (dotnet)
+  authMe(): Observable<any> {
+    return this.http.get<any>(this.apiUrl + 'Auth/getAuthMe');
+  }
+
   // Se déconnecter : Appel à l'Api Backend (dotnet)
   logout(): Observable<any> {
     return this.http.get<any>(this.apiUrl + 'Auth/logout');

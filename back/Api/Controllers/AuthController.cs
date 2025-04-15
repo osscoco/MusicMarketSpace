@@ -1,10 +1,13 @@
 ﻿using back.Dtos.Requests;
+using back.Dtos.Responses;
 using back.Interfaces;
 using back.Repositories;
 using back.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Common;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace back.Controllers
 {
@@ -15,14 +18,16 @@ namespace back.Controllers
     {
         #region Attributs
         private readonly AuthRepository _authRepository;
+        private readonly UserRepository _userRepository;
         private readonly TranslateException _translateException;
         private readonly Token _token;
         #endregion
 
         #region Constructeur
-        public AuthController(IAuthRepository authRepository, TranslateException translateException, Token token)
+        public AuthController(IAuthRepository authRepository, IUserRepository userRepository, TranslateException translateException, Token token)
         {
             _authRepository = (AuthRepository)authRepository;
+            _userRepository = (UserRepository)userRepository;
             _translateException = translateException;
             _token = token;
         }
@@ -91,7 +96,7 @@ namespace back.Controllers
 
         #region GetAuthMe
         [HttpGet("getAuthMe")]
-        public ResponseApi<object> GetAuthMe()
+        public async Task<ResponseApi<object>> GetAuthMe()
         {
             try
             {
@@ -107,18 +112,34 @@ namespace back.Controllers
                     };
                 }
 
-                var emailUserInfo = "";
+                var email = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
-                foreach (var (item, index) in user.Claims.Select((value, i) => (value, i)))
+                if (email == null)
                 {
-                    if (index == 0)
-                        emailUserInfo = item.Value;
+                    return new ResponseApi<object>
+                    {
+                        Success = false,
+                        Data = null,
+                        Message = "Impossible de récupérer l'email à partir du token."
+                    };
+                }
+
+                ActionResult<UserResponse> userEntity = await _userRepository.GetOneUserByEmail(email);
+
+                if (userEntity == null)
+                {
+                    return new ResponseApi<object>
+                    {
+                        Success = false,
+                        Data = null,
+                        Message = "Utilisateur introuvable."
+                    };
                 }
 
                 return new ResponseApi<object>
                 {
                     Success = true,
-                    Data = Ok(emailUserInfo),
+                    Data = userEntity,
                     Message = "Vous êtes authentifié"
                 };
             }

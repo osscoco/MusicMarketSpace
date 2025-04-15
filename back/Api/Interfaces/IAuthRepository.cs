@@ -11,6 +11,6 @@ namespace back.Interfaces
         public Task<ActionResult<ResponseApi<object>>> Login(LoginAuthRequest loginAuth);
         public string HashString(string input);
         public Task<bool> UserExistsByEmailAndPassword(string email, string passwordHashed);
-        public ArrayList GetUserAndBearerTokenByUser(UserResponse user);
+        public String GetUserAndBearerTokenByUser(UserResponse user);
     }
 }

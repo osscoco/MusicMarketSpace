@@ -4,8 +4,6 @@ import { LayoutComponent } from '../layout/layout.component';
 import { HomeComponent } from '../../components/home/home.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../../interceptors/auth.interceptor';
-import { AdminComponent } from '../admin/admin.component';
-import { AdminGuard } from '../../guards/admin/admin.guard';
 
 const routes: Routes = [
   // La route '' (racine) appel le composant 'Layout'
@@ -14,8 +12,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       // La route '' (racine) appel le sous composant 'Home'
-      { path: '', component: HomeComponent },
-      { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
+      { path: '', component: HomeComponent }
     ]
   }
 ];
