@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { ToastService } from './toast.service';
+import { SpinnerService } from './spinner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +9,12 @@ import { ToastService } from './toast.service';
 export class AuthService {
 
   // Constructeur
-  constructor(private api: ApiService, private toastService: ToastService) { }
+  constructor(private api: ApiService, private toastService: ToastService, private spinnerService: SpinnerService) { }
   
   // Vérifier si l'utilisateur est connecté
   checkAuthentication(): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      this.spinnerService.showFor(3000);
       if (localStorage.getItem("tokenApi") && localStorage.getItem("isLoggedIn")) {
         this.api.authMe().subscribe({
           next: async (data: any) => {
@@ -37,6 +39,7 @@ export class AuthService {
   // Se connecter : Appel à l'ApiService
   login(email: string, password: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      this.spinnerService.showFor(3000);
       this.api.login({ mail: email, password: password }).subscribe({
         next: async (data: any) => {
           if (data["success"] == true) {
@@ -67,6 +70,7 @@ export class AuthService {
   // Se créer un compte : Appel à l'ApiService
   signup(pseudo: string, email: string, password: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      this.spinnerService.showFor(3000);
       this.api.signup({ pseudo: pseudo, mail: email, password: password }).subscribe({
         next: async (data: any) => {
           if (data["success"] == true) {
@@ -95,6 +99,7 @@ export class AuthService {
   // Se déconnecter : Appel à l'ApiService
   logout(): Promise<boolean> {
     return new Promise((resolve, reject) => {
+      this.spinnerService.showFor(3000);
       this.api.logout().subscribe({
         next: async (data: any) => {
           if (data["success"] == true) {
