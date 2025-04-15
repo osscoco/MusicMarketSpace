@@ -4,6 +4,7 @@ import { LayoutComponent } from '../layout/layout.component';
 import { HomeComponent } from '../../components/home/home.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../../interceptors/auth.interceptor';
+import { SpinnerInterceptor } from '../../interceptors/spinner.interceptor';
 
 const routes: Routes = [
   // La route '' (racine) appel le composant 'Layout'
@@ -25,6 +26,11 @@ const routes: Routes = [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SpinnerInterceptor,
       multi: true
     }
   ],
