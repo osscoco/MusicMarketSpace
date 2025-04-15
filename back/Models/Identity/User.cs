@@ -17,10 +17,7 @@ namespace Models.Identity
         public required string PasswordHashed { get; set; }
         [MaxLength(10)]
         public string? ContactPhone { get; set; }
-        public bool IsSSO { get; set; }
         public Guid RoleId { get; set; }
-        [JsonIgnore]
-        public Role? Role { get; set; }
         [JsonIgnore]
         public ICollection<UserChoice> Choices { get; set; } = new List<UserChoice>();
 

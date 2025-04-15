@@ -1,4 +1,5 @@
-@if (!this.authService.isAuthenticated()) {
+<!-- Si l'utilisateur n'est pas connecté -->
+@if (!isAuthenticated) {
     <p style="color: white;">Utilisateur anonyme</p>
 }  @else {
     <p style="color: white;">Bienvenue utilisateur connecté</p>

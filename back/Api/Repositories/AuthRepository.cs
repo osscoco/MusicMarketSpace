@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Models.Common;
-using Models.Identity;
-using System.Collections;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -45,13 +43,11 @@ namespace back.Repositories
                     UserId = user.UserId,
                     Pseudo = user.Pseudo,
                     Mail = user.Mail,
-                    ContactPhone = user.ContactPhone,
-                    IsSSO = user.IsSSO,
-                    RoleId = user.RoleId
+                    ContactPhone = user.ContactPhone
                 })
                 .FirstAsync();
 
-                ArrayList userAndbearerToken = this.GetUserAndBearerTokenByUser(userResponse);
+                String userAndbearerToken = this.GetUserAndBearerTokenByUser(userResponse);
 
                 return new ResponseApi<object>
                 {
@@ -95,7 +91,7 @@ namespace back.Repositories
             return await _context.Users.AnyAsync(u => u.Mail == email && u.PasswordHashed == passwordHashed);
         }
 
-        public ArrayList GetUserAndBearerTokenByUser(UserResponse user)
+        public String GetUserAndBearerTokenByUser(UserResponse user)
         {
             var claims = new[]
             {
@@ -106,13 +102,8 @@ namespace back.Repositories
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var signin = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(issuer: _configuration["Jwt:Issuer"], audience: _configuration["Jwt:Audience"], claims: claims, expires: DateTime.UtcNow.AddMinutes(60), signingCredentials: signin);
-            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
-            ArrayList arraylist = new ArrayList();
-            arraylist.Add(user);
-            arraylist.Add(tokenValue);
-
-            return arraylist;
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
         #endregion
     }

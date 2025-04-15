@@ -7,7 +7,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
-    if (req.url.endsWith('logout')) {
+    if (req.url.endsWith('logout') || req.url.endsWith('getAuthMe')) {
       
       // Récupération du tocken dans le localstorage
       const token = localStorage.getItem('tokenApi');

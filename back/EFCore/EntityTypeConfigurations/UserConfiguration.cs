@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Models.Identity;
-using Models;
 
 namespace EFCore.EntityTypeConfigurations
 {
@@ -35,10 +34,6 @@ namespace EFCore.EntityTypeConfigurations
 
             builder.HasIndex(u => u.ContactPhone)
                 .IsUnique();
-
-            builder.HasOne(u => u.Role)
-            .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId);
         }
     }
 }

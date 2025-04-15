@@ -20,13 +20,11 @@ namespace back.Middlewares
             if (!string.IsNullOrEmpty(token) && _token.IsTokenRevoked(token))
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Token has been revoked");
+                await context.Response.WriteAsync("Le token a été révoqué");
                 return;
             }
 
             await _next(context);
         }
     }
-
-
 }

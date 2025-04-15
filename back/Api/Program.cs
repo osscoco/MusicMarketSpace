@@ -4,12 +4,10 @@ using back.Repositories;
 using back.Services;
 using EFCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Models.Identity;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -141,7 +139,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddSingleton<Token>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<TranslateException>();
 #endregion
 
@@ -163,6 +160,19 @@ app.Use(async (context, next) =>
 
     await next();
 });
+#endregion
+
+#region Insertion données redondantes après migration
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    // Appliquer la migration automatiquement (si pas encore fait)
+    dbContext.Database.Migrate();
+
+    // Seed des données
+    DbSeeder.SeedRoles(dbContext);
+}
 #endregion
 
 // Configure the HTTP request pipeline.

@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { NgIf } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar-authenticated',
@@ -16,7 +15,7 @@ export class NavbarAuthenticatedComponent implements OnInit {
   isMobileOrTablet = false;
 
   // Constructeur
-  constructor(protected authService: AuthService, private router: Router) {}
+  constructor(protected authService: AuthService) {}
 
   /// ---
   /// --- Cette partie est diédiée au bon affichage des éléments du menu navbar en fonction du support (PC, Tablette, Mobile)
@@ -37,10 +36,6 @@ export class NavbarAuthenticatedComponent implements OnInit {
   /// ---
   /// --- Fin de la partie dédiée
   /// ---
-
-  admin() {
-    this.router.navigateByUrl('/admin');
-  }
     
   // Une fois le click sur le bouton de déconnexion
   async logout() {
